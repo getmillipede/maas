@@ -36,7 +36,7 @@ class Millipede(Resource):
         response = make_response(
             millipede(args.size, args.comment, args.reverse)
         )
-        response.headers['Content-type'] = 'text/plain'
+        response.headers['Content-type'] = 'text/plain; charset=utf-8'
 
         return response
 
