@@ -6,7 +6,7 @@ API to generate millipedes
 
 ## Documentation
 
-GET /api/\<version\>/
+GET /api/\<version\>/millipede
 * return: a millipede
 * parameters:
     * size: provide the size of the millipede (default is 10)
