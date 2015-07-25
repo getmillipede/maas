@@ -3,6 +3,10 @@
 MaaS: Millipede as a Service
 """
 
+import sys
+import os.path
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
+
 from flask import Flask
 
 from modules.mod_millipede import millipede_mod
