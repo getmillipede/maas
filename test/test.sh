@@ -1,8 +1,9 @@
 #!/bin/sh
 
-cd ..
+BASEDIR=$(dirname $0)
+PROJECT_DIR=${BASEDIR}/..
+
+cd ${PROJECT_DIR}
 docker-compose up -d
-cd -
 py.test -v
-cd ..
 docker-compose stop
