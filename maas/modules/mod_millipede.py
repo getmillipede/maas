@@ -6,7 +6,7 @@ Millipede calls
 
 from millipede import millipede
 
-from flask import Blueprint, make_response
+from flask import Blueprint, make_response, g
 from flask_restful import Api, Resource, reqparse
 
 from lib.reqtypes import boolean
@@ -33,10 +33,23 @@ class Millipede(Resource):
 
         args = parser.parse_args()
 
-        response = make_response(
-            millipede(args.size, args.comment, args.reverse)
-        )
+        cached = None
+        if g.redis:
+            key = "{}#{}#{}".format(args.size,
+                                    args.reverse,
+                                    args.comment)
+            cached = g.redis.get(key)
+
+        if not cached:
+            value = millipede(args.size, args.comment, args.reverse)
+        else:
+            value = cached
+
+        response = make_response(value)
         response.headers['Content-type'] = 'text/plain; charset=utf-8'
+
+        if g.redis and not cached:
+            g.redis.set(key, value)
 
         return response
 

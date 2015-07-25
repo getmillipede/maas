@@ -9,17 +9,25 @@ import sys
 import os.path
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
-from flask import Flask
+from os import environ
+
+from redis import ConnectionError
+
+from flask import Flask, g
+from flask.ext.redis import FlaskRedis
 
 from modules.mod_millipede import millipede_mod
 
 
 API_VERSION = '0.0.1'
+CONFIG_PATH = os.environ.get('MAAS_CONFIG_FILE', '/etc/maas.cfg')
 
 app = Flask(__name__)
 app.config['API_PREFIX'] = '/api'
 app.config['API_VERSION'] = API_VERSION
 
+if os.path.isfile(CONFIG_PATH):
+    app.config.from_pyfile(CONFIG_PATH)
 
 def make_module_prefix(mod_name):
     """
@@ -32,6 +40,20 @@ def make_module_prefix(mod_name):
 
 app.register_blueprint(millipede_mod,
                        url_prefix=make_module_prefix('millipede'))
+
+
+@app.before_request
+def before_request():
+    """
+    Setup before request
+    """
+    if not getattr(g, 'redis', None):
+        redis_store = FlaskRedis(app)
+        try:
+            redis_store.client_list()
+        except ConnectionError:
+            redis_store = None
+        g.redis = redis_store
 
 
 @app.route('/')

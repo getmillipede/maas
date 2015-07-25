@@ -6,5 +6,6 @@ WORKDIR /code
 
 RUN pip install -r requirements/prod.txt
 RUN pip install uwsgi
+RUN cp /code/config/maas.py /etc/maas.cfg
 
 CMD uwsgi --http :9090 --module maas --callable app
