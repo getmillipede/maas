@@ -2,6 +2,8 @@
 """
 MaaS: Millipede as a Service
 """
+# ok to deactivate it for flask
+# pylint: disable=C0103
 
 import sys
 import os.path
@@ -17,6 +19,7 @@ API_VERSION = '0.0.1'
 app = Flask(__name__)
 app.config['API_PREFIX'] = '/api'
 app.config['API_VERSION'] = API_VERSION
+
 
 def make_module_prefix(mod_name):
     """
