@@ -1,0 +1,13 @@
+web:
+    build: .
+    ports:
+        - "9090:9090"
+    volumes:
+        - .:/code
+
+nginx:
+    build: ./nginx
+    links:
+        - web:web
+    ports:
+        - "3000:80"
