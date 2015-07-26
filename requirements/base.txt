@@ -1,4 +1,4 @@
 Flask==0.10.1
 Flask-RESTful==0.3.3
-millipede==1.0
+millipede==2.0
 Flask-Redis==0.1.0
